@@ -25,7 +25,7 @@ class TachesController extends Controller
 
     public function store(Request $request)
     {
-        // Normalize common Flutter/web payload keys to backend expectations
+        // Ici je le normalise les names des champs flutter en fonction des attentes de mon apk laravel 
         if ($request->has('categoryId')) {
             $request->merge(['category_id' => (int) $request->input('categoryId')]);
         }
@@ -55,7 +55,7 @@ class TachesController extends Controller
     {
         $tache = Tache::with(['category', 'owner', 'sharedUsers'])->findOrFail($id);
         $userId = Auth::guard('api')->id();
-        // Autoriser la consultation si owner ou partagé avec l'utilisateur
+        // Autoriser la consultation si c‘est le proporietaire
         if ($tache->owner_id !== $userId && !$tache->sharedUsers->contains('id', $userId)) {
             return response()->json(['message' => 'Non autorisé'], 403);
         }
@@ -69,7 +69,7 @@ class TachesController extends Controller
             return response()->json(['message' => 'Seul le propriétaire peut modifier cette tâche'], 403);
         }
 
-        // Normalize common Flutter/web payload keys to backend expectations
+        // Ici je le normalise les names des champs flutter en fonction des attentes de mon apk laravel 
         if ($request->has('categoryId')) {
             $request->merge(['category_id' => (int) $request->input('categoryId')]);
         }
